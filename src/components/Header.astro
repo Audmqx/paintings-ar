@@ -3,7 +3,6 @@ import { site } from '../data/site';
 const path = Astro.url.pathname;
 const links = [
   { href: '/', label: 'Accueil', current: path === '/' },
-  { href: '/nouvelles-toiles/', label: '2021 à aujourd’hui', current: path.startsWith('/nouvelles-toiles') },
   { href: '/2018-2020/', label: '2018-2020', current: path.startsWith('/2018-2020') },
   { href: '/old-works/', label: '2013-2017', current: path.startsWith('/old-works') },
 ];

@@ -7,6 +7,7 @@ import { embers } from './embers';
 import { menu } from './menu';
 import { armor } from './armor';
 import { home } from './home';
+import { engraving } from './engrave';
 
 // Chaque colonne coule avec son propre retard : des traînées, pas un rideau.
 // Web Animations API et non GSAP : une animation de transform tourne sur le compositeur, elle reste fluide pendant
@@ -75,6 +76,7 @@ export function setupMotion() {
     });
   }
   home();
+  engraving();
 
   let last = 0;
   onScroll(({ y }) => {

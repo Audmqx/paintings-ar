@@ -10,6 +10,8 @@
   --c-accent: #9e4436;  /* sang séché, très rare */
   --c-curtain: #050506; /* nuit */
     --c-fog: #1d2622;     /* brume vert-de-gris */
+  --c-reel-bg: #1d1e17; /* olive sombre, tiré des ombres de la vidéo de l'atelier (fond du prologue) */
+  --c-reel-ink: #aba184; /* sable de sa lumière (traits de la gravure) */
 
   --f-display: 'Fell SC', 'Cormorant', Garamond, serif;
   --f-body: 'Cormorant', 'Cormorant Garamond', Garamond, serif;

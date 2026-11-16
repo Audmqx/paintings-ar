@@ -1,6 +1,7 @@
 // Accueil : le texte suit le défilement (scrub), en plus des révélations déclenchées par le front du fil.
 //   [data-big]        grand titre plein écran : les lettres descendent dans leur masque au rythme du défilement
-//   [data-words-lit]  phrase dont les mots s'allument un à un pendant qu'elle traverse l'écran
+//   [data-chars-lit]  bloc de texte (un ou plusieurs paragraphes) dont les lettres s'allument une à une, de 0,1 à 1,
+//                     dans l'ordre de lecture et sur un seul défilement : la lumière court d'un paragraphe à l'autre
 //   .h-name__line     le nom se laisse traîner vers le bas en quittant le premier écran
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -25,12 +26,12 @@ export function home() {
       });
     });
 
-    root.querySelectorAll<HTMLElement>('[data-words-lit]').forEach((el) => {
+    root.querySelectorAll<HTMLElement>('[data-chars-lit]').forEach((el) => {
       SplitText.create(el, {
-        type: 'words', autoSplit: true,
-        onSplit: (self) => gsap.fromTo(self.words, { opacity: 0.14 }, {
-          opacity: 1, stagger: 0.08, ease: 'none',
-          scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 45%', scrub: true },
+        type: 'words,chars', autoSplit: true,
+        onSplit: (self) => gsap.fromTo(self.chars, { opacity: 0.1 }, {
+          opacity: 1, stagger: 0.04, ease: 'none',
+          scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: true },
         }),
       });
     });

@@ -8,4 +8,5 @@ export default defineConfig({
   integrations: [sitemap()],
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   build: { inlineStylesheets: 'auto' },
+  devToolbar: { enabled: false },
 });

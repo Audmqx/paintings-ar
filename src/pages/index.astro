@@ -1,25 +1,43 @@
 ---
 import Base from '../layouts/Base.astro';
+import Stars from '../components/Stars.astro';
+import Engraved from '../components/Engraved.astro';
 import { site, about, exhibitions } from '../data/site';
 ---
 <Base description={`${site.name}, peintre. Figures défaites, ateliers et sous-bois à l’huile. Expositions à Paris, Nice, Montpellier, Arles et Bram ; estampes sur Tetra Pak ; toiles animées en 3D.`}>
   <div class="home" data-reveal-start="top 62%">
 
-    <section class="h-hero" aria-labelledby="h-name">
-      <h1 id="h-name" class="h-name">
-        <span class="h-name__line" data-split="chars" data-intro>Maxim</span>
-        <span class="h-name__line h-name__line--2" data-split="chars" data-intro data-delay="0.12">Iangaev</span>
-      </h1>
-      <p class="h-role" data-reveal="fade" data-intro data-delay="0.7">Artiste plasticien</p>
-      <p class="h-since" data-reveal="fade" data-intro data-delay="0.85">Développeur fullstack</p>
-    </section>
+    <!-- Début de l'accueil, sur l'olive uni tiré de la vidéo : les plans gravés et le prologue s'y suivent. -->
+    <div class="h-olive">
+      <Engraved shot={4} intro class="h-reel--intro" alt={`${site.name} peint à l’atelier, de profil, le pinceau à la main.`} />
 
-    <section class="h-about" aria-label="À propos">
-      <p class="h-lead" data-words-lit>{about.lead}</p>
-      <div class="h-text">
-        {about.text.map((t, i) => <p data-split="lines" data-delay={String(i * 0.1)}>{t}</p>)}
+      <section class="h-hero" aria-labelledby="h-name">
+        <h1 id="h-name" class="h-name">
+          <span class="h-name__line" data-split="chars" data-intro>Maxim</span>
+          <span class="h-name__line h-name__line--2" data-split="chars" data-intro data-delay="0.12">Iangaev</span>
+        </h1>
+        <p class="h-role" data-reveal="fade" data-intro data-delay="0.7">Artiste plasticien</p>
+        <p class="h-since" data-reveal="fade" data-intro data-delay="0.85">Développeur fullstack</p>
+      </section>
+
+      <!-- Le geste, en diptyque : son regard sur le portrait qu'il peint, et la main au pinceau. -->
+      <div class="h-duo">
+        <Engraved shot={2} class="h-duo__main" alt={`${site.name} de profil, devant le portrait de femme qu’il peint.`} />
+        <Engraved shot={3} class="h-duo__detail" alt="Gros plan : la main du peintre, le pinceau sur la toile." />
       </div>
-    </section>
+
+      <section class="h-about" aria-labelledby="h-about-title">
+        <div class="h-label" data-reveal="fade"><Stars /><h2 id="h-about-title">Prologue</h2><Stars /></div>
+        <div class="h-lit" data-chars-lit>
+          <p class="h-lead">{about.lead}</p>
+          <div class="h-text">
+            {about.text.map((t) => <p>{t}</p>)}
+          </div>
+        </div>
+      </section>
+
+      <canvas class="h-drips h-drips--down" data-drips="down" aria-hidden="true"></canvas>
+    </div>
 
     <section class="h-shows" aria-labelledby="h-shows-title">
       <h2 id="h-shows-title" class="h-big" data-big>Expositions</h2>
@@ -41,7 +59,6 @@ import { site, about, exhibitions } from '../data/site';
     <section class="h-doors" aria-labelledby="h-doors-title">
       <h2 id="h-doors-title" class="h-big" data-big>Les toiles</h2>
       <ul class="doors">
-        <li><a class="door" href="/nouvelles-toiles/"><span class="door__k">Depuis 2021</span><span class="door__t" data-split="chars">2021 à aujourd’hui</span></a></li>
         <li><a class="door" href="/2018-2020/"><span class="door__k">Peintures, dessins</span><span class="door__t" data-split="chars">2018-2020</span></a></li>
         <li><a class="door" href="/old-works/"><span class="door__k">Les débuts</span><span class="door__t" data-split="chars">2013-2017</span></a></li>
         <li><a class="door" href={`mailto:${site.email}`}><span class="door__k">Commande, exposition</span><span class="door__t" data-split="chars">Écrire</span></a></li>

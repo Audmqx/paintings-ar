@@ -1,0 +1,10 @@
+---
+// Un plan de la vidéo de l'atelier, gravé en WebGL (motion/engrave.ts). L'image fixe sert de repli sans WebGL.
+interface Props { shot: 2 | 3 | 4; alt: string; intro?: boolean; class?: string }
+const { shot, alt, intro = false, class: cls } = Astro.props;
+---
+<figure class:list={['h-reel', cls]} data-engrave={shot} data-engrave-intro={intro || undefined}>
+  <canvas aria-hidden="true"></canvas>
+  <img src={`/video/plan-${shot}.jpg`} alt={alt} width="1280" height="674" loading={intro ? 'eager' : 'lazy'} decoding="async" />
+  <video src={`/video/plan-${shot}.mp4`} muted loop playsinline autoplay preload={intro ? 'auto' : 'metadata'} aria-hidden="true"></video>
+</figure>

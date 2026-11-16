@@ -213,3 +213,17 @@ Choix de l'artiste : sur le site, peintures + dessins, classés par période.
   (page ou mention « Crédits ») avant la mise en ligne, la licence l'exige.
 - Rideau : chaque animation fait commitStyles() puis cancel() à la fin : la position des bandes survit à l'échange
   de page d'Astro (avant, le rideau se rouvrait pendant l'échange et la nouvelle page apparaissait trop tôt).
+
+## Accueil gravé (2026-11-16)
+Modèle : la scène d'intro de sondaven.com (gravure WebGL à traits verticaux sur fond uni, formes découpées, bords effilochés).
+- Défilement vertical, tout le début sur l'olive uni (.h-olive) : plan 4 en ouverture (84svh, seul le bas découpé),
+  nom + sous-titres, diptyque plans 2 + 3 (.h-duo : le regard sur le portrait, la main au pinceau), prologue (lettres qui s'allument, [data-chars-lit] sur le bloc),
+  puis traits qui coulent dans le reste de la page (canvas[data-drips="down"]).
+- components/Engraved.astro (shot, alt, intro) + motion/engrave.ts : WebGL 2 brut, un canvas par plan, rendu seulement à l'écran.
+- public/video/plan-2..4.mp4 (plan 1, la palette, retiré) : chaque plan en aller-retour, 3 calques empilés (haut → bas). Plan 4 : corps détouré
+  (MediaPipe), toile détourée, passage 2 derrière. Plans 2-3 : plein cadre ; gros plans illisibles en traits seuls,
+  ils se fondent en image deux tons olive / sable à l'approche (uDuo), la trame reste en filigrane.
+- Source : « présenation IM - cheveux v3.mp4 » (cheveux dégraissés). Coupes : 0,25 / 4,17 / 9 / 11 s.
+  Scripts de fabrication : .assets-src/video/ (ignoré par git), avec un README des étapes.
+- Couleurs prises dans la vidéo : --c-reel-bg #1d1e17 (olive sombre), --c-reel-ink #aba184 (sable).
+- L'armure 3D tourne encore derrière l'olive (invisible jusqu'aux expositions) : à couper ou déplacer si le GPU souffre.

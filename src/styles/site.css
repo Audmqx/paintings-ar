@@ -265,22 +265,23 @@ html:not(.gl-on) .reel img { height: clamp(16rem, 62svh, 40rem); width: auto; }
 .curtain__col { height: 112%; margin-top: -6%; background: linear-gradient(var(--c-bg) 90%, transparent); will-change: transform; transform: translateY(-112%); }
 
 /* ===== Accueil : nef, à propos, expositions ===== */
-.home { position: relative; z-index: var(--z-content); padding-inline: var(--gutter); }
+.home { position: relative; z-index: var(--z-content); padding-inline: var(--gutter); overflow-x: clip; }
 
 /* L'armure passe derrière les textes : un voile sombre les détache. */
 .h-about, .h-shows, .h-doors {
   position: relative; max-width: 68rem; margin-inline: auto;
   padding-block: calc(var(--u) * 10);
 }
-.home.is-live :is(.h-about, .h-shows, .h-doors)::before {
+.home.is-live :is(.h-shows, .h-doors)::before {
   content: ''; position: absolute; inset: -2rem 0; z-index: -1; pointer-events: none;
   background: radial-gradient(closest-side, rgb(5 6 6 / 0.82), rgb(5 6 6 / 0.55) 75%, transparent);
 }
 
-.h-hero {
-  position: relative; min-height: 100svh; display: grid; align-content: end;
-  padding-block: calc(var(--gutter) * 4) calc(var(--gutter) * 2.5);
-}
+.h-hero { position: relative; padding-block: calc(var(--u) * 4) calc(var(--u) * 6); }
+
+/* Le début de l'accueil repose sur l'olive uni, pleine largeur : la 3D de la page ne passe pas derrière. */
+.h-olive { position: relative; isolation: isolate; }
+.h-olive::before { content: ''; position: absolute; inset: 0 calc(50% - 50vw); z-index: -1; background: var(--c-reel-bg); }
 .h-name { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: var(--t-mega); line-height: 0.86; letter-spacing: 0.01em; }
 .h-name__line { display: block; }
 .h-name__line--2 { padding-left: 0.6em; }
@@ -294,9 +295,45 @@ html:not(.gl-on) .reel img { height: clamp(16rem, 62svh, 40rem); width: auto; }
 }
 .h-shows .h-big, .h-doors .h-big { margin-inline: calc(var(--gutter) * -1); }
 
-.h-lead { margin: 0 0 calc(var(--u) * 6); font-family: var(--f-display); font-size: clamp(2.2rem, 1rem + 4.2vw, 5.5rem); line-height: 1; max-width: 16ch; }
-.h-text { display: grid; gap: calc(var(--u) * 2); max-width: 38rem; margin-left: auto; font-size: var(--t-body); line-height: 1.55; }
+.h-about { text-align: center; }
+.h-drips {
+  position: absolute; left: 50%; width: 100vw; max-width: none; height: 14vh; translate: -50% 0;
+  color: var(--c-reel-bg); pointer-events: none;
+}
+.h-drips--down { top: 100%; }
+/* La section suivante commence sous les traits : ils ne touchent jamais son titre. */
+.h-olive + .h-shows { margin-top: calc(14vh + var(--u) * 2); }
+.h-label { display: flex; align-items: center; justify-content: center; gap: calc(var(--u) * 1.6); margin-bottom: calc(var(--u) * 4); }
+.h-label h2 { margin: 0; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; }
+.stars { display: flex; gap: 0.35rem; color: var(--c-muted); }
+.stars svg { width: 0.55rem; height: 0.55rem; }
+.h-lead { margin: 0 auto calc(var(--u) * 5); font-family: var(--f-display); font-size: clamp(2.2rem, 1rem + 4.2vw, 5.5rem); line-height: 1; max-width: 16ch; text-wrap: balance; }
+.h-text { display: grid; gap: calc(var(--u) * 2.4); max-width: 44rem; margin-inline: auto; font-size: var(--t-l); line-height: 1.3; text-wrap: pretty; }
 .h-text p { margin: 0; }
+
+/* Plans de la vidéo de l'atelier, gravés en WebGL (motion/engrave.ts). Pleine largeur, au-delà de la colonne de texte. */
+.h-reel { position: relative; margin: calc(var(--u) * 6) calc(50% - 50vw); }
+.h-reel canvas, .h-reel img { display: block; width: 100%; aspect-ratio: 1280 / 674; object-fit: cover; object-position: 50% 50%; }
+/* L'ouverture : le plan remplit presque tout le premier écran, bord haut franc, seul le bas est découpé. */
+.h-reel--intro { margin-top: 0; }
+.h-reel--intro canvas, .h-reel--intro img { aspect-ratio: auto; height: 84svh; object-position: 40% 50%; }
+/* La vidéo empile les deux calques détourés : elle ne sert que de source au shader, jamais affichée. */
+.h-reel video { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+@media (max-width: 767px) { .h-reel canvas, .h-reel img { aspect-ratio: 4 / 5; } }
+
+/* Le geste, en diptyque : deux plans de taille moyenne (un gros plan trop grand ne se lit plus), décalés en hauteur. */
+.h-duo { display: grid; grid-template-columns: 1.55fr 1fr; gap: calc(var(--u) * 3); align-items: end; margin: calc(var(--u) * 8) 0; }
+.h-duo .h-reel { margin: 0; }
+.h-duo__main canvas, .h-duo__main img { aspect-ratio: 4 / 3; }
+.h-duo__detail { translate: 0 12%; }
+.h-duo__detail canvas, .h-duo__detail img { aspect-ratio: 4 / 5; }
+@media (max-width: 767px) {
+  .h-duo { grid-template-columns: 1fr; gap: calc(var(--u) * 2); }
+  .h-duo__detail { width: 72%; justify-self: end; translate: 0 0; }
+}
+.h-reel canvas { display: none; }
+.h-reel.is-engraved canvas { display: block; }
+.h-reel.is-engraved img { display: none; }
 
 /* Une année : le chiffre reste collé à gauche pendant que sa liste passe à droite. */
 .year { display: grid; grid-template-columns: minmax(6rem, 1fr) 2.2fr; column-gap: var(--gutter); border-top: 1px solid var(--c-line); padding-block: calc(var(--u) * 2.5); }
@@ -328,7 +365,7 @@ html:not(.gl-on) .reel img { height: clamp(16rem, 62svh, 40rem); width: auto; }
   .year, .door { grid-template-columns: 1fr; row-gap: calc(var(--u) * 1); }
   .year__n { position: static; font-size: clamp(2.6rem, 14vw, 3.5rem); }
   .door__t { font-size: clamp(2.4rem, 12vw, 3.5rem); }
-  .home.is-live :is(.h-about, .h-shows, .h-doors)::before { inset: -3rem calc(var(--gutter) * -1) -3rem calc(var(--gutter) * -1); background: linear-gradient(transparent, rgb(5 6 6 / 0.8) 4rem, rgb(5 6 6 / 0.8) calc(100% - 4rem), transparent); }
+  .home.is-live :is(.h-shows, .h-doors)::before { inset: -3rem calc(var(--gutter) * -1) -3rem calc(var(--gutter) * -1); background: linear-gradient(transparent, rgb(5 6 6 / 0.8) 4rem, rgb(5 6 6 / 0.8) calc(100% - 4rem), transparent); }
   .h-big { font-size: 15vw; }
 }
 @media (prefers-reduced-motion: reduce) { .door__t { transition: color 0.3s; } }
