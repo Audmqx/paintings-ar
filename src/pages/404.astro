@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Page introuvable" description="Cette page n’existe pas. Les toiles sont toutes sur la page d’accueil, avec leurs détails et l’atelier.">
+  <section class="lost">
+    <div class="lost__canvas" aria-hidden="true"></div>
+    <div class="lost__text">
+      <h1 class="lost__title" data-split="lines" data-intro>Rien n’a encore été peint ici.</h1>
+      <p data-reveal="fade" data-intro data-delay="0.5">La toile est prête, le fond est posé, mais personne n’y a touché.</p>
+      <a class="more roll" href="/" data-reveal="fade" data-intro data-delay="0.7">
+        <span>Revenir aux toiles</span><span aria-hidden="true">Revenir aux toiles</span>
+      </a>
+    </div>
+  </section>
+</Base>

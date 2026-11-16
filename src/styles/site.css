@@ -1,0 +1,344 @@
+/* ===== Fond ===== */
+html { background: var(--c-bg); }
+/* Sans GL (reduced motion, pas de WebGL) : le fond brossé en CSS, immobile. */
+html:not(.gl-on) body {
+  background:
+    radial-gradient(60% 50% at 50% 40%, rgb(93 107 95 / 0.10), transparent 70%),
+    radial-gradient(120% 60% at 50% 110%, rgb(29 38 34 / 0.8), transparent 70%),
+    var(--c-bg);
+  background-attachment: fixed;
+}
+::selection { background: var(--c-fg); color: var(--c-bg); }
+:focus-visible { outline-color: var(--c-fg); }
+
+.stage, .lost {
+  padding-inline: var(--gutter);
+}
+
+/* ===== Survols (un traitement par rôle) ===== */
+/* Roulement vers le bas : le libellé est traîné hors du cadre, son double descend à sa place. */
+.roll { display: inline-grid; overflow: clip; vertical-align: top; }
+.roll > span { grid-area: 1 / 1; transition: translate 0.55s cubic-bezier(0.7, 0, 0.2, 1); }
+.roll > span + span { translate: 0 -160%; color: var(--c-fg); }
+@media (hover: hover) {
+  .roll:hover > span { translate: 0 160%; }
+  .roll:hover > span + span { translate: 0 0; }
+}
+.roll:focus-visible > span { translate: 0 160%; }
+.roll:focus-visible > span + span { translate: 0 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .roll > span { transition: none; translate: none !important; }
+  .roll > span + span { visibility: hidden; }
+  .roll:focus-visible { color: var(--c-fg); text-decoration: underline; text-underline-offset: 0.2em; }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) {
+  .roll:hover { color: var(--c-fg); text-decoration: underline; text-underline-offset: 0.2em; }
+}
+
+/* Liens dans le texte : soulignés au repos, le trait s'épaissit. */
+.link {
+  background: linear-gradient(var(--c-accent) 0 0) left bottom / 100% 1px no-repeat;
+  padding-bottom: 0.1em;
+  transition: background-size 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), color 0.3s;
+}
+@media (hover: hover) { .link:hover { background-size: 100% 100%; color: var(--c-bg); } }
+.link:focus-visible { background-size: 100% 100%; color: var(--c-bg); }
+.utility { color: var(--c-muted); transition: color 0.3s; text-decoration: underline 1px; text-underline-offset: 0.25em; }
+@media (hover: hover) { .utility:hover { color: var(--c-fg); } }
+.utility:focus-visible { color: var(--c-fg); }
+
+/* Lettre de gravure : technique, format, année. */
+.lettre {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.9;
+  color: var(--c-muted);
+  font-variant-numeric: tabular-nums;
+}
+.lettre--center { text-align: center; }
+
+.more { font-size: var(--t-s); font-weight: 500; letter-spacing: 0.02em; padding-block: 0.5em; }
+
+/* ===== Cadre ===== */
+.frame {
+  position: fixed; inset: 0 0 auto; z-index: var(--z-header);
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: calc(var(--gutter) * 0.75) var(--gutter);
+  font-size: var(--t-s); font-weight: 500;
+  pointer-events: none;
+  transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.frame a { pointer-events: auto; padding: 0.4em 0.35em; position: relative; }
+/* Un filet se dessine sous le mot au survol (et au focus). */
+.frame a::after, .more::after {
+  content: ''; position: absolute; left: 0.35em; right: 0.35em; bottom: 0.15em; height: 1px;
+  background: currentColor; scale: 0 1; transform-origin: left; transition: scale 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) { .frame a:hover::after, .more:hover::after { scale: 1 1; } }
+.frame a:focus-visible::after, .more:focus-visible::after { scale: 1 1; }
+.more { position: relative; }
+/* Scrim derrière l'en-tête : il ne se pose jamais directement sur une toile. */
+.frame::before {
+  content: ''; position: absolute; inset: 0 0 -3.5rem; z-index: -1; pointer-events: none;
+  background: linear-gradient(rgb(7 7 7 / 0.85), rgb(7 7 7 / 0.5) 55%, transparent);
+}
+.frame { text-transform: uppercase; letter-spacing: 0.22em; font-size: 0.8rem; }
+.frame__name { font-family: var(--f-display); font-weight: 400; text-transform: none; letter-spacing: 0.12em; font-size: 1.25rem; }
+.frame__nav ul { display: flex; gap: calc(var(--u) * 2.4); list-style: none; padding: 0; }
+html.frame-away .frame { translate: 0 -120%; }
+
+/* ===== Loader : la nuit, le nom, un fil ===== */
+#loader { background: rgb(5 6 6); padding: var(--gutter); color: var(--c-fg); display: grid; place-items: center; align-content: center; }
+.loader__inner { display: grid; justify-items: center; gap: calc(var(--u) * 2.2); }
+.loader__name {
+  display: block; font-family: var(--f-display); font-size: clamp(2.4rem, 1rem + 5vw, 6rem);
+  letter-spacing: 0.12em; margin-right: -0.12em; line-height: 1; color: var(--c-fg); white-space: nowrap;
+}
+.loader__track { position: relative; width: clamp(8rem, 18vw, 16rem); height: 1px; background: var(--c-line); overflow: hidden; }
+.loader__bar { position: absolute; inset: 0; margin: 0; height: 1px; background: var(--c-fg); transform: scaleX(0); transform-origin: left; }
+.loader__count { font-size: 0.75rem; letter-spacing: 0.3em; color: var(--c-muted); font-variant-numeric: lining-nums tabular-nums; }
+html.motion:has(#loader:not([hidden])) .frame__name { opacity: 0; }
+.frame__name { transition: opacity 0.3s; }
+
+/* ===== Rideau ===== */
+.curtain__panel { display: flex; background: none; }
+
+/* ===== Toile ===== */
+.painting { margin: 0; }
+.painting__frame { aspect-ratio: var(--ratio); width: 100%; position: relative; }
+.painting__frame img { width: 100%; height: 100%; object-fit: cover; }
+.painting figcaption { margin-top: calc(var(--u) * 1.2); font-size: var(--t-xs); color: var(--c-muted); }
+
+/* ===== Accueil : la scène ===== */
+.stage { position: relative; height: 100svh; overflow: clip; touch-action: none; user-select: none; -webkit-user-select: none; }
+/* Vignette de cinéma au-dessus de tout (le canvas est dessous). */
+.stage::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(ellipse 70% 62% at 50% 50%, transparent 55%, rgb(3 4 4 / 0.85) 100%),
+    linear-gradient(rgb(3 4 4 / 0.6), transparent 18%, transparent 78%, rgb(3 4 4 / 0.75));
+}
+
+/* Source des textures et repli : avec GL, invisible (les toiles sont dans le canvas). */
+.reel { list-style: none; padding: 0; margin: 0; }
+.reel button { display: grid; gap: calc(var(--u) * 1); text-align: left; padding: 0; color: inherit; cursor: default; }
+.reel__label { font-size: var(--t-xs); color: var(--c-muted); display: grid; }
+html.gl-on .reel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+/* Le « + » qui suit chaque toile. */
+.pluses { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.plus {
+  position: absolute; left: 0; top: 0; width: 2.75rem; height: 2.75rem; margin: 0;
+  display: grid; place-items: center; pointer-events: auto; cursor: zoom-in;
+  border: 1px solid rgb(200 195 181 / 0.35); border-radius: 50%;
+  background: rgb(5 6 6 / 0.55);
+  transition: border-color 0.4s, background-color 0.4s, scale 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.plus { color: var(--c-fg); padding: 0; overflow: visible; }
+.plus svg { display: block; transition: rotate 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+@media (hover: hover) {
+  .plus:hover { border-color: var(--c-fg); background: rgb(200 195 181 / 0.12); scale: 1.12; }
+  .plus:hover svg { rotate: 90deg; }
+}
+.plus:focus-visible { border-color: var(--c-fg); scale: 1.12; outline-offset: 4px; }
+.plus:active { scale: 0.94; }
+
+/* Titre de la toile au centre : grand, en bas à gauche. */
+.caption {
+  position: absolute; left: var(--gutter); bottom: calc(var(--gutter) * 1.2); z-index: 2;
+  display: grid; gap: calc(var(--u) * 0.6); pointer-events: none; max-width: min(40rem, 46vw);
+}
+.caption__clip { display: block; overflow: clip; padding-bottom: 0.08em; }
+.caption__clip > span { display: block; }
+.caption__note { font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--c-muted); }
+.caption__label { font-family: var(--f-display); font-size: clamp(1.4rem, 0.9rem + 1.3vw, 2.4rem); line-height: 1.05; color: var(--c-fg); letter-spacing: 0.01em; }
+
+.side {
+  position: absolute; left: var(--gutter); top: 50%; z-index: 2; pointer-events: none;
+  writing-mode: vertical-rl; rotate: 180deg; translate: 0 -50%;
+  font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--c-muted);
+}
+
+/* Zoom : l'interface se retire, une croix apparaît. */
+.zoom-close {
+  position: absolute; right: var(--gutter); top: 50%; translate: 0 -50%; z-index: 3;
+  width: 3.25rem; height: 3.25rem; border: 1px solid rgb(200 195 181 / 0.4); border-radius: 50%;
+  display: grid; place-items: center; cursor: zoom-out;
+  background: rgb(5 6 6 / 0.6);
+  opacity: 0; visibility: hidden; transition: opacity 0.5s, visibility 0.5s, scale 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.zoom-close { color: var(--c-fg); padding: 0; }
+.zoom-close svg { display: block; transition: rotate 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+@media (hover: hover) { .zoom-close:hover svg { rotate: 90deg; } }
+@media (hover: hover) { .zoom-close:hover { scale: 1.1; border-color: var(--c-fg); } }
+.stage.is-zoom .zoom-close { opacity: 1; visibility: visible; transition-delay: 0.5s; }
+.stage.is-zoom { cursor: zoom-out; }
+.caption, .side, .pluses { transition: opacity 0.6s; }
+.stage.is-zoom .side, .stage.is-zoom .pluses { opacity: 0; pointer-events: none; }
+html.is-zoom-frame .frame { opacity: 0; }
+
+/* ===== 404 ===== */
+.lost {
+  min-height: 100svh; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter);
+  align-items: center; padding-block: calc(var(--gutter) * 4) var(--gutter);
+}
+.lost__canvas {
+  grid-column: 2 / 6; aspect-ratio: 0.8; outline: 1px solid var(--c-line); outline-offset: -1px;
+  background: linear-gradient(rgb(255 240 225 / 0.03), transparent);
+}
+.lost__text { grid-column: 7 / 12; display: grid; gap: calc(var(--u) * 2.5); justify-items: start; }
+.lost__title { font-family: var(--f-display); font-size: var(--t-xl); line-height: 1; font-weight: 300; }
+
+
+/* ===== Téléphone (390 px) ===== */
+@media (max-width: 767px) {
+  .frame { letter-spacing: 0.14em; font-size: 0.72rem; }
+  .frame__nav ul { gap: calc(var(--u) * 2); }
+  .side { display: none; }
+  .caption { max-width: 70vw; bottom: var(--gutter); }
+  .caption__label { font-size: clamp(1.25rem, 5.5vw, 1.6rem); }
+  .zoom-close { top: auto; bottom: var(--gutter); translate: 0 0; }
+  .lost { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .lost__canvas { grid-column: 2 / 5; }
+  .lost__text { grid-column: 1 / 7; margin-top: calc(var(--u) * 4); }
+}
+
+/* ===== Sans GL (mouvement réduit, pas de WebGL) : une composition à part entière ===== */
+html:not(.gl-on) .stage { height: auto; min-height: 100svh; overflow: visible; touch-action: auto; user-select: auto; display: grid; align-content: center; padding-block: calc(var(--gutter) * 4) calc(var(--gutter) * 3); }
+html:not(.gl-on) .stage::after, html:not(.gl-on) .caption, html:not(.gl-on) .zoom-close, html:not(.gl-on) .side { display: none; }
+html:not(.gl-on) .reel { display: flex; gap: calc(var(--u) * 3); overflow-x: auto; scroll-snap-type: x mandatory; padding-inline: var(--gutter); padding-bottom: calc(var(--u) * 1.5); scrollbar-width: thin; scrollbar-color: var(--c-muted) transparent; }
+html:not(.gl-on) .reel li { flex: none; scroll-snap-align: center; }
+html:not(.gl-on) .reel img { height: clamp(16rem, 62svh, 40rem); width: auto; }
+
+/* ===== Menu ===== */
+.menu-btn {
+  pointer-events: auto; position: relative; padding: 0.4em 0.35em; color: var(--c-fg);
+  font: inherit; letter-spacing: inherit; text-transform: inherit;
+}
+.menu-btn::after {
+  content: ''; position: absolute; left: 0.35em; right: 0.35em; bottom: 0.15em; height: 1px;
+  background: currentColor; scale: 0 1; transform-origin: left; transition: scale 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) { .menu-btn:hover::after { scale: 1 1; } }
+.menu-btn:focus-visible::after { scale: 1 1; }
+.menu { position: fixed; inset: 0; z-index: calc(var(--z-header) + 5); }
+.menu[hidden] { display: none; }
+.menu__panel {
+  position: absolute; inset: 0; background: rgb(5 5 5 / 0.97);
+  display: grid; grid-template-rows: auto 1fr auto; padding: var(--gutter);
+}
+.menu__close {
+  justify-self: end; width: 3rem; height: 3rem; border: 1px solid rgb(200 195 181 / 0.4); border-radius: 50%;
+  display: grid; place-items: center; color: var(--c-fg);
+  transition: scale 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+}
+.menu__close svg { transition: rotate 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+@media (hover: hover) { .menu__close:hover { scale: 1.08; border-color: var(--c-fg); } .menu__close:hover svg { rotate: 90deg; } }
+.menu__list { list-style: none; padding: 0; margin: 0; align-self: center; display: grid; gap: calc(var(--u) * 1.5); }
+.menu__link {
+  display: inline-block; overflow: clip; padding-bottom: 0.08em; position: relative;
+  font-family: var(--f-display); font-size: clamp(2.4rem, 1rem + 5.5vw, 6.5rem); line-height: 1.02; color: var(--c-muted);
+  transition: color 0.4s;
+}
+.menu__text { display: inline-block; }
+.menu__link::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0.06em; height: 1px; background: var(--c-fg);
+  scale: 0 1; transform-origin: left; transition: scale 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) { .menu__link:hover { color: var(--c-fg); } .menu__link:hover::after { scale: 1 1; } }
+.menu__link:focus-visible { color: var(--c-fg); }
+.menu__link:focus-visible::after { scale: 1 1; }
+.menu__link[aria-current='page'] { color: var(--c-fg); }
+.menu__link[aria-current='page']::before {
+  content: ''; position: absolute; left: -1.4rem; top: 50%; width: 6px; height: 6px; rotate: 45deg; background: var(--c-accent);
+}
+.menu__meta { list-style: none; padding: 0; margin: 0; display: flex; gap: calc(var(--u) * 3); font-size: 0.8rem; letter-spacing: 0.22em; text-transform: uppercase; }
+.menu__meta a { display: inline-block; padding: 0.5em 0; color: var(--c-muted); transition: color 0.3s; }
+@media (hover: hover) { .menu__meta a:hover { color: var(--c-fg); } }
+.menu__meta a:focus-visible { color: var(--c-fg); }
+@media (max-width: 767px) { .menu__link[aria-current='page']::before { left: -1rem; } .menu__list { padding-left: 1rem; } }
+
+/* Rideau de transition : colonnes noires. */
+.curtain__col { height: 112%; margin-top: -6%; background: linear-gradient(var(--c-bg) 90%, transparent); will-change: transform; transform: translateY(-112%); }
+
+/* ===== Accueil : nef, à propos, expositions ===== */
+.home { position: relative; z-index: var(--z-content); padding-inline: var(--gutter); }
+
+/* L'armure passe derrière les textes : un voile sombre les détache. */
+.h-about, .h-shows, .h-doors {
+  position: relative; max-width: 68rem; margin-inline: auto;
+  padding-block: calc(var(--u) * 10);
+}
+.home.is-live :is(.h-about, .h-shows, .h-doors)::before {
+  content: ''; position: absolute; inset: -2rem 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(closest-side, rgb(5 6 6 / 0.82), rgb(5 6 6 / 0.55) 75%, transparent);
+}
+
+.h-hero {
+  position: relative; min-height: 100svh; display: grid; align-content: end;
+  padding-block: calc(var(--gutter) * 4) calc(var(--gutter) * 2.5);
+}
+.h-name { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: var(--t-mega); line-height: 0.86; letter-spacing: 0.01em; }
+.h-name__line { display: block; }
+.h-name__line--2 { padding-left: 0.6em; }
+.h-role, .h-since { margin: calc(var(--u) * 1.2) 0 0; font-size: 0.78rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--c-muted); }
+.h-role { color: var(--c-fg); margin-top: calc(var(--u) * 3); }
+
+/* Grands titres : un mot qui tient toute la largeur, centré, comme une enseigne. */
+.h-big {
+  margin: 0 0 calc(var(--u) * 8); text-align: center; white-space: nowrap;
+  font-family: var(--f-display); font-weight: 400; font-size: clamp(3.4rem, 16.5vw, 17rem); line-height: 0.9; letter-spacing: -0.01em;
+}
+.h-shows .h-big, .h-doors .h-big { margin-inline: calc(var(--gutter) * -1); }
+
+.h-lead { margin: 0 0 calc(var(--u) * 6); font-family: var(--f-display); font-size: clamp(2.2rem, 1rem + 4.2vw, 5.5rem); line-height: 1; max-width: 16ch; }
+.h-text { display: grid; gap: calc(var(--u) * 2); max-width: 38rem; margin-left: auto; font-size: var(--t-body); line-height: 1.55; }
+.h-text p { margin: 0; }
+
+/* Une année : le chiffre reste collé à gauche pendant que sa liste passe à droite. */
+.year { display: grid; grid-template-columns: minmax(6rem, 1fr) 2.2fr; column-gap: var(--gutter); border-top: 1px solid var(--c-line); padding-block: calc(var(--u) * 2.5); }
+.year__n {
+  margin: 0; align-self: start; position: sticky; top: calc(var(--gutter) * 3.5);
+  font-family: var(--f-display); font-weight: 400; font-size: var(--t-xl); line-height: 0.9; font-variant-numeric: lining-nums;
+}
+.year__list { list-style: none; margin: 0; padding: 0; display: grid; }
+.show { display: grid; gap: 0.25em; padding-block: calc(var(--u) * 1.6); border-bottom: 1px solid var(--c-line); }
+.show:last-child { border-bottom: 0; }
+.show__place { font-size: var(--t-m); line-height: 1.25; }
+.show__title { font-style: italic; color: var(--c-fg); }
+.show__meta { display: flex; flex-wrap: wrap; gap: 0 1.2em; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-muted); }
+
+/* Portes : trois grands mots. */
+.doors { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--c-line); }
+.doors li { border-bottom: 1px solid var(--c-line); }
+.door { display: grid; grid-template-columns: minmax(6rem, 1fr) 2.2fr; column-gap: var(--gutter); align-items: baseline; padding-block: calc(var(--u) * 2.5); position: relative; }
+.door__k { font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-muted); }
+.door__t { font-family: var(--f-display); font-size: var(--t-xl); line-height: 1; color: var(--c-muted); transition: color 0.4s, translate 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+@media (hover: hover) { .door:hover .door__t { color: var(--c-fg); translate: 0.15em 0; } }
+.door:focus-visible .door__t { color: var(--c-fg); }
+.h-foot { margin: calc(var(--u) * 6) 0 0; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-muted); }
+
+@media (max-width: 767px) {
+  .h-name__line--2 { padding-left: 0.3em; }
+  .h-name { font-size: clamp(4rem, 22vw, 6rem); }
+  .h-text { margin-left: 0; }
+  .year, .door { grid-template-columns: 1fr; row-gap: calc(var(--u) * 1); }
+  .year__n { position: static; font-size: clamp(2.6rem, 14vw, 3.5rem); }
+  .door__t { font-size: clamp(2.4rem, 12vw, 3.5rem); }
+  .home.is-live :is(.h-about, .h-shows, .h-doors)::before { inset: -3rem calc(var(--gutter) * -1) -3rem calc(var(--gutter) * -1); background: linear-gradient(transparent, rgb(5 6 6 / 0.8) 4rem, rgb(5 6 6 / 0.8) calc(100% - 4rem), transparent); }
+  .h-big { font-size: 15vw; }
+}
+@media (prefers-reduced-motion: reduce) { .door__t { transition: color 0.3s; } }
+
+
+
+/* Autour des gants, presque noir : vignette fixe entre le canvas et le texte. */
+.home.is-live::before {
+  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(rgb(5 5 5 / var(--cover, 1)), rgb(5 5 5 / var(--cover, 1))),
+    radial-gradient(ellipse 48% 52% at 50% 50%, transparent 0%, rgb(5 5 5 / 0.55) 55%, rgb(5 5 5 / 0.96) 100%);
+}

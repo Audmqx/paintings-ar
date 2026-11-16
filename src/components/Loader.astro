@@ -1,0 +1,12 @@
+---
+// Premier chargement : la nuit, le nom au centre, un fil qui se tend avec le chargement réel.
+// Sortie : le fil se retire, le nom glisse jusqu'au coin haut gauche (il y devient l'en-tête), la nuit se lève.
+import { site } from '../data/site';
+---
+<div id="loader" role="status" aria-label="Chargement">
+  <div class="loader__inner">
+    <span class="loader__name" data-loader-name>{site.name}</span>
+    <span class="loader__track" aria-hidden="true"><span class="loader__bar" data-loader-bar></span></span>
+    <span class="loader__count" data-loader-count aria-hidden="true">000</span>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import Column from '../../components/Column.astro';
+import { site } from '../../data/site';
+import { ig2018 } from '../../data/instagram';
+---
+<Base title="2018-2020" description={`Peintures et dessins de ${site.name}, 2018 à 2020 : visages défaits, corps, fleurs noires, ateliers.`}>
+  <Column slides={ig2018} title={`2018-2020, ${site.name}`} label="Peintures et dessins, 2018 à 2020" side="2018 à 2020" />
+</Base>

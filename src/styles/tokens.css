@@ -1,0 +1,36 @@
+@font-face { font-family: 'Fell SC'; src: url('/fonts/im-fell-english-sc-400-normal.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Cormorant'; src: url('/fonts/cormorant-garamond-300_700-normal.woff2') format('woff2'); font-weight: 300 700; font-style: normal; font-display: swap; }
+
+:root {
+  /* Échantillonné sur les toiles (DESIGN.md) */
+  --c-bg: #070707;      /* encre */
+  --c-fg: #c8c3b5;      /* os terni */
+  --c-muted: #9b9e96;   /* lichen mort (AA sur l'encre et sur la vignette) */
+  --c-line: rgb(200 195 181 / 0.14);
+  --c-accent: #9e4436;  /* sang séché, très rare */
+  --c-curtain: #050506; /* nuit */
+    --c-fog: #1d2622;     /* brume vert-de-gris */
+
+  --f-display: 'Fell SC', 'Cormorant', Garamond, serif;
+  --f-body: 'Cormorant', 'Cormorant Garamond', Garamond, serif;
+
+  --t-mega: clamp(5.5rem, 1rem + 19vw, 19rem);
+  --t-xl: clamp(3.25rem, 1.6rem + 6.4vw, 8rem);
+  --t-l: clamp(1.6rem, 1.2rem + 1.7vw, 2.75rem);
+  --t-m: clamp(1.2rem, 1.05rem + 0.55vw, 1.5rem);
+  --t-body: clamp(1.125rem, 1.05rem + 0.25vw, 1.3rem);
+  --t-s: 1rem;
+  --t-xs: 0.875rem;
+
+  --u: clamp(0.5rem, 0.35rem + 0.6vw, 1rem);
+  --gutter: clamp(1rem, 0.6rem + 1.6vw, 2.5rem);
+  --cols: 12;
+  --radius: 0px;
+
+  --z-gl: 0;
+  --z-content: 1;
+  --z-header: 50;
+  --z-cursor: 80;
+  --z-curtain: 90;
+  --z-loader: 100;
+}

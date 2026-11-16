@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, about, exhibitions } from '../data/site';
+---
+<Base description={`${site.name}, peintre. Figures défaites, ateliers et sous-bois à l’huile. Expositions à Paris, Nice, Montpellier, Arles et Bram ; estampes sur Tetra Pak ; toiles animées en 3D.`}>
+  <div class="home" data-reveal-start="top 62%">
+
+    <section class="h-hero" aria-labelledby="h-name">
+      <h1 id="h-name" class="h-name">
+        <span class="h-name__line" data-split="chars" data-intro>Maxim</span>
+        <span class="h-name__line h-name__line--2" data-split="chars" data-intro data-delay="0.12">Iangaev</span>
+      </h1>
+      <p class="h-role" data-reveal="fade" data-intro data-delay="0.7">Artiste plasticien</p>
+      <p class="h-since" data-reveal="fade" data-intro data-delay="0.85">Développeur fullstack</p>
+    </section>
+
+    <section class="h-about" aria-label="À propos">
+      <p class="h-lead" data-words-lit>{about.lead}</p>
+      <div class="h-text">
+        {about.text.map((t, i) => <p data-split="lines" data-delay={String(i * 0.1)}>{t}</p>)}
+      </div>
+    </section>
+
+    <section class="h-shows" aria-labelledby="h-shows-title">
+      <h2 id="h-shows-title" class="h-big" data-big>Expositions</h2>
+      {exhibitions.map((y) => (
+        <div class="year">
+          <h3 class="year__n" data-split="chars">{y.year}</h3>
+          <ul class="year__list">
+            {y.shows.map((s) => (
+              <li class="show" data-reveal="up">
+                <span class="show__place">{s.place}{s.title && <em class="show__title">, « {s.title} »</em>}</span>
+                <span class="show__meta">{s.city}{s.note && <span class="show__note">{s.note}</span>}{!s.note && s.kind === 'collective' && <span class="show__kind">Exposition collective</span>}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+
+    <section class="h-doors" aria-labelledby="h-doors-title">
+      <h2 id="h-doors-title" class="h-big" data-big>Les toiles</h2>
+      <ul class="doors">
+        <li><a class="door" href="/nouvelles-toiles/"><span class="door__k">Depuis 2021</span><span class="door__t" data-split="chars">2021 à aujourd’hui</span></a></li>
+        <li><a class="door" href="/2018-2020/"><span class="door__k">Peintures, dessins</span><span class="door__t" data-split="chars">2018-2020</span></a></li>
+        <li><a class="door" href="/old-works/"><span class="door__k">Les débuts</span><span class="door__t" data-split="chars">2013-2017</span></a></li>
+        <li><a class="door" href={`mailto:${site.email}`}><span class="door__k">Commande, exposition</span><span class="door__t" data-split="chars">Écrire</span></a></li>
+      </ul>
+      <p class="h-foot">© {new Date().getFullYear()} {site.name}</p>
+    </section>
+  </div>
+</Base>
