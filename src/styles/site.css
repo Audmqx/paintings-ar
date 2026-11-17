@@ -263,6 +263,8 @@ html:not(.gl-on) .reel img { height: clamp(16rem, 62svh, 40rem); width: auto; }
 
 /* Rideau de transition : colonnes noires. */
 .curtain__col { height: 112%; margin-top: -6%; background: linear-gradient(var(--c-bg) 90%, transparent); will-change: transform; transform: translateY(-112%); }
+/* Largeurs fractionnaires + calques GPU = bords anti-crénelés : chaque bande déborde de 2px sur la suivante pour masquer le joint. */
+.curtain__col { margin-right: -2px; }
 
 /* ===== Accueil : nef, à propos, expositions ===== */
 .home { position: relative; z-index: var(--z-content); padding-inline: var(--gutter); overflow-x: clip; }
